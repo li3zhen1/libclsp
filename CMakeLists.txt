@@ -17,7 +17,7 @@
 cmake_minimum_required(VERSION 3.13.0)
 
 project(libclsp
-	VERSION 0.1.3
+	VERSION 0.1.4
 	DESCRIPTION "A language server protocol C++ library"
 	HOMEPAGE_URL "https://github.com/otreblan/libclsp"
 	LANGUAGES "CXX"
@@ -31,6 +31,8 @@ include(FindPkgConfig)
 
 # The library itself
 add_library(${PROJECT_NAME} SHARED)
+
+
 
 # Version for the library symlinks
 set_target_properties(${PROJECT_NAME}
@@ -81,12 +83,21 @@ target_compile_options(${PROJECT_NAME}
 		-DRAPIDJSON_HAS_STDSTRING=1
 )
 
+## Default flags
+#if(NOT DEFINED ENV{CXXFLAGS})
+#	set(CMAKE_CXX_FLAGS "-Wall -Wextra -g -Wl,-z,defs")
+#endif()
+
 # Default flags
 if(NOT DEFINED ENV{CXXFLAGS})
-	set(CMAKE_CXX_FLAGS "-Wall -Wextra -g -Wl,-z,defs")
+	set(CMAKE_CXX_FLAGS "-Wall -Wextra -g")
+	add_link_options(LINKER -z,defs)
 endif()
 
 
 install(TARGETS ${PROJECT_NAME}
 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
+
+
+

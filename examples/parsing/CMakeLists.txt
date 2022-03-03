@@ -4,7 +4,9 @@ project(parsing
 	LANGUAGES "CXX"
 )
 
+include(GNUInstallDirs)
 include(FindPkgConfig)
+include(FindBoost)
 
 # The binary itself
 add_executable(${PROJECT_NAME})
@@ -22,22 +24,41 @@ set_target_properties(${PROJECT_NAME}
 
 
 # Libraries
-pkg_check_modules(LIBCLSP REQUIRED libclsp)
+#pkg_check_modules(LIBCLSP REQUIRED libclsp)
+
+pkg_check_modules(rapidjson REQUIRED IMPORTED_TARGET RapidJSON)
+
+
+
+include_directories(../../include)
+
+set(LIBCLSP_INCLUDE_DIRS
+		../../include)
+
+find_library(LIBCLSP libclsp.dylib ../../cmake-build-release)
 
 # Header path
 target_include_directories(${PROJECT_NAME}
 	PUBLIC
 		${LIBCLSP_INCLUDE_DIRS}
+		Boost::headers
+
+	INTERFACE
+		PkgConfig::rapidjson
 )
 
 # Linking
 target_link_libraries(${PROJECT_NAME}
 	PUBLIC
-		${LIBCLSP_LIBRARIES}
+		${LIBCLSP}
+		Boost::headers
+
+	INTERFACE
+		PkgConfig::rapidjson
 )
 
 # Other flags (without this rapidjson can't use std::string)
-target_compile_definitions(${PROJECT_NAME}
+target_compile_options(${PROJECT_NAME}
 	PUBLIC
-		${LIBCLSP_CFLAGS_OTHER}
+		-DRAPIDJSON_HAS_STDSTRING=1
 )
