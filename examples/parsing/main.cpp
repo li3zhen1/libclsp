@@ -11,7 +11,7 @@ int main()
 
 
 	// The object to save the parsed json
-	Position p;
+	InitializedParams p;
 
 	// A handler that gets events from the reader
 	JsonHandler handler;
@@ -47,7 +47,7 @@ int main()
 	};
 
 	// The json
-	StringStream s("{\"line\":10,\"character\":2.5}");
+	StringStream s("{}");
 
 	// The reader that sends events to the handler
 	Reader r;
@@ -56,8 +56,8 @@ int main()
 	r.Parse(s, handler);
 
 	// get<> is used because Number is an alias to variant<int, double>
-	cout << "line:" << get<int>(p.line) << '\n';
-	cout << "character:" << get<double>(p.character) << '\n';
+//	cout << "line:" << get<int>(p.line) << '\n';
+//	cout << "character:" << get<double>(p.character) << '\n';
 
 	return 0;
 }

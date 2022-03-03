@@ -239,7 +239,7 @@ namespace clsp {
     }
 
     bool JsonHandler::EndObject(SizeType) {
-        if (objectStack.top().object->isValid(*this)) {
+        if (!objectStack.empty()) {
             objectStack.pop();
 
             // The key returns to the last Object/Array
